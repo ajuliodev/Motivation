@@ -3,7 +3,7 @@ package com.example.motivation.data
 import com.example.motivation.infra.MotivationConstants
 import kotlin.random.Random
 
-data class Phrase(val description: String, val category: Int, val lang: String)
+data class Phrase(val description: String, val category: Int, val language: String)
 
 class Mock {
 
@@ -105,10 +105,18 @@ class Mock {
     )
 
     // Obtém frase aleatória de acordo com o filtro
-    fun getPhrase(value: Int,lang: String): String {
-        val filtered = listPhrases.filter {
-            (it.category == value || value == all) && it.lang == lang
+    fun getPhrase(value: Int, language: String): String {
+
+        // Caso a língua do usuário não esteja entre as disponíveis
+        var langFilter = language.lowercase()
+        if (language !in listOf(langEn, langPt, langFr)) {
+            langFilter = langPt
         }
+
+        val filtered = listPhrases.filter {
+            (it.category == value || value == all) && (it.language == langFilter)
+        }
+
         // Número aleatório de 0 ao tamanho da lista retornada do filtro
         val rand = Random.nextInt(filtered.size)
 
